@@ -1,0 +1,50 @@
+NAME = fdf
+
+SRC = main.c map_display.c math_display.c event.c \
+errorcase.c readfile3.c \
+command_window.c parallel.c \
+readfile4.c
+
+OBJ = $(SRC:.c=.o)
+
+
+SRC_PATH = ./
+OBJ_PATH = ./obj/
+
+SRC_POS = $(addprefix $(SRC_PATH),$(SRC))
+
+INC = -I includes -I minilibX
+
+LIBFT = libft/libft.a
+
+CC = gcc
+
+MLX = -L ./minilibX -lmlx -L /usr/local/lib -lm -lX11 -lXext -lbsd
+
+FLAGS = -Wall -Wextra -Werror
+
+HEADER = -I .
+
+all: $(NAME)
+
+# $(OBJ_PATH)%.o: $(SRC_PATH)%.c
+# 	@printf "%-50s" "compiling "$(notdir $<)...
+# 	@mkdir -p $(OBJ_PATH)
+# 	@$(CC) $(CFLAGS) $(OPTI) $(INC) -o $@ -c $<
+# 	@printf "\e[1;32m[OK]\e[0m\n"
+
+$(NAME): $(OBJ) $(LIBFT)
+	$(CC) $(OBJ) $(HEADER) -o $(NAME) $(INC) $(LIBFT) $(MLX)
+
+$(LIBFT):
+	make -C ./libft/
+
+clean:
+	make clean -C ./libft/
+	rm -rf $(OBJ)
+
+fclean: clean
+	make fclean -C ./libft/
+	rm -rf $(NAME)
+
+re: fclean all
